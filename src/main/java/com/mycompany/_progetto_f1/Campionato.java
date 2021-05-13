@@ -22,12 +22,14 @@ public class Campionato
         piloti=new Pilota[NUM_MAX_PILOTI];
     }
     
-    /*public Campionato(Campionato c) 
+    public Campionato(Campionato c) 
     {   
         piloti=new Pilota[NUM_MAX_PILOTI];
-        for(int i=0;i<NUM_MAX_PILOTI;i++)
-            piloti[i]=c.getPilota(getN, cognome);
-    }*/
+        for(int i=0;i<nPilotiPresenti;i++)
+        {
+           piloti[i]=c.getPilotaPosizione(i);
+        }
+    }
     
     public static int getNumMaxPiloti()
     {
@@ -52,25 +54,17 @@ public class Campionato
     }
     
     
-    public int aggiungiPilota(Pilota p)
+    public void aggiungiPilota(Pilota p)
     {
-        try
-        {
             piloti[nPilotiPresenti]=new Pilota(p);
             nPilotiPresenti++;
-            return 0;                               //0 pilota aggiunto corretamente
-        }
-        catch(ArrayIndexOutOfBoundsException posizioneNonValida)
-        {
-            return -1;
-        }    
     }
     
-    public Pilota getPilota(String nome, String cognome)
+    public Pilota getPilota(int numero)
     {
         for(int i=0;i<nPilotiPresenti;i++)
         {
-           if(piloti[i].getCognome()==cognome && piloti[i].getNome()==nome)
+           if(piloti[i].getnPilota()==numero)
            {
                return piloti[i];
            }
@@ -78,12 +72,18 @@ public class Campionato
         return null;
     }
     
-    public void eliminaPilota(String nome, String cognome)   
+    public Pilota getPilotaPosizione(int posizione)
+    {
+        return piloti[posizione];
+    }
+    
+    
+    public void eliminaPilota(int numeroPilota)   
     {
         
             for(int i=0;i<nPilotiPresenti;i++)
             {
-               if(piloti[i].getCognome()==cognome && piloti[i].getNome()==nome)
+               if(piloti[i].getnPilota()==numeroPilota)
                {
                    aggiornaPosizione(i);
                }
@@ -110,11 +110,11 @@ public class Campionato
         return s; 
     }
     
-    public int aggiungiPunti(String nome,String cognome,int punti)
+    public int aggiungiPunti(int numero,int punti)
     {
         for(int i=0;i<nPilotiPresenti;i++)
             {
-               if(piloti[i].getCognome()==cognome && piloti[i].getNome()==nome)
+               if(piloti[i].getnPilota()==numero)
                {
                    punti=punti+piloti[i].getPunti();
                    piloti[i].setPunti(punti);
@@ -139,7 +139,7 @@ public class Campionato
         return classifica; 
     }
     
-    public Pilota[] visualizzaPilotiScuderiaOrdinati(String scuderia) throws EccezionePosizioneNonValida
+    public Pilota[] visualizzaPilotiScuderiaOrdinati(String scuderia) 
     {
         Pilota[] pilotiScuderia=new Pilota[getNumPiloti()];
         Pilota pilota;
@@ -147,7 +147,7 @@ public class Campionato
         
         for(int i=0;i<nPilotiPresenti;i++)
             {
-               if(piloti[i].getScuderia()==scuderia)
+               if(piloti[i].getScuderia().compareToIgnoreCase(scuderia)==0)
                {
                     pilota=piloti[i];
                     pilotiScuderia[c]=pilota;
@@ -164,7 +164,7 @@ public class Campionato
         int puntiScuderia=0;
         for(int i=0;i<nPilotiPresenti;i++)
             {
-               if(piloti[i].getScuderia()==scuderia)
+               if(piloti[i].getScuderia().compareToIgnoreCase(scuderia)==0)
                {
                     puntiScuderia=+puntiScuderia+piloti[i].getPunti();
                }

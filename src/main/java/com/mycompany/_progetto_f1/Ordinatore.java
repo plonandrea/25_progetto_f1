@@ -95,7 +95,7 @@ public class Ordinatore
         return ordinato;     
     }
     
-    public static Pilota[] ordinaScuderia(Pilota[] a) throws NullPointerException, EccezionePosizioneNonValida
+    public static Pilota[] ordinaScuderia(Pilota[] a) throws NullPointerException
     {
         int c=0;
         for (int i=0;i<a.length;i++)
