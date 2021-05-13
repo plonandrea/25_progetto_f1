@@ -5,6 +5,8 @@
  */
 package com.mycompany._progetto_f1;
 
+import eccezioni.*;
+
 /**
  *
  * @author plona
@@ -106,6 +108,69 @@ public class Campionato
             s=s+" "+i+" "+piloti[i].toString()+"\n";
         }
         return s; 
+    }
+    
+    public int aggiungiPunti(String nome,String cognome,int punti)
+    {
+        for(int i=0;i<nPilotiPresenti;i++)
+            {
+               if(piloti[i].getCognome()==cognome && piloti[i].getNome()==nome)
+               {
+                   punti=punti+piloti[i].getPunti();
+                   piloti[i].setPunti(punti);
+               }
+            }
+        return 0; 
+    }
+    
+    public Pilota[] elencoPuntiPiloti()
+    {
+        Pilota[] classifica=new Pilota[getNumPiloti()];
+        Pilota pilota;
+        
+        for(int i=0;i<nPilotiPresenti;i++)
+            {
+               pilota=piloti[i];
+               classifica[i]=pilota;
+            }
+        
+        classifica=Ordinatore.ordinaClassificaPiloti(classifica);
+        
+        return classifica; 
+    }
+    
+    public Pilota[] visualizzaPilotiScuderiaOrdinati(String scuderia) throws EccezionePosizioneNonValida
+    {
+        Pilota[] pilotiScuderia=new Pilota[getNumPiloti()];
+        Pilota pilota;
+        int c=0;
+        
+        for(int i=0;i<nPilotiPresenti;i++)
+            {
+               if(piloti[i].getScuderia()==scuderia)
+               {
+                    pilota=piloti[i];
+                    pilotiScuderia[c]=pilota;
+                    c++;
+               }
+            }
+        pilotiScuderia=Ordinatore.ordinaScuderia(pilotiScuderia);
+        return pilotiScuderia;
+        
+    }
+    
+    public int visualizzaPuntiScuderia(String scuderia)
+    {
+        int puntiScuderia=0;
+        for(int i=0;i<nPilotiPresenti;i++)
+            {
+               if(piloti[i].getScuderia()==scuderia)
+               {
+                    puntiScuderia=+puntiScuderia+piloti[i].getPunti();
+               }
+            }
+        
+        return puntiScuderia;
     }
     
     

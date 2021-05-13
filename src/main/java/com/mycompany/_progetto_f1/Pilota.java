@@ -89,8 +89,9 @@ public class Pilota
         return punti;
     }
 
-    public void setPunti(int punti) {
-        this.punti = punti;
+    public void setPunti(int punti) 
+    {
+        this.punti=punti;
     }
 
     public String toString() 
