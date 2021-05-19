@@ -7,18 +7,14 @@ package eccezioni;
 
 /**
  *
- * @author User
+ * @author STUDENTE
  */
-public class FileException extends Exception
+public class EccezionePilotaGiaPresente extends Exception
 {
-    private String motivoEccezione;
-    public FileException(String message)
-    {
-        motivoEccezione=message;
-    }
-    
     public String toString()
     {
-        return motivoEccezione;
+        String s="";
+        s+="il numero inserito è gia stato assegnato ad un altro pilota";
+        return s;
     }
 }

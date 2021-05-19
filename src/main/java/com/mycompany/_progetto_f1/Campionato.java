@@ -6,12 +6,17 @@
 package com.mycompany._progetto_f1;
 
 import eccezioni.*;
+import file.TextFile;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  *
  * @author plona
  */
-public class Campionato 
+public class Campionato implements Serializable
 {
     private Pilota[] piloti;
     private static final int NUM_MAX_PILOTI=20;
@@ -78,7 +83,7 @@ public class Campionato
     }
     
     
-    public void eliminaPilota(int numeroPilota)   
+    public void eliminaPilota(int numeroPilota) throws EccezionePilotaNonPresente   
     {
         
             for(int i=0;i<nPilotiPresenti;i++)
@@ -87,6 +92,9 @@ public class Campionato
                {
                    aggiornaPosizione(i);
                }
+               else
+                   throw new EccezionePilotaNonPresente();
+                      
             }    
     }
     
@@ -110,15 +118,22 @@ public class Campionato
         return s; 
     }
     
-    public int aggiungiPunti(int numero,int punti)
+    public int aggiungiPunti(int numero,int punti) throws EccezionePilotaNonPresente
     {
         for(int i=0;i<nPilotiPresenti;i++)
             {
                if(piloti[i].getnPilota()==numero)
                {
                    punti=punti+piloti[i].getPunti();
-                   piloti[i].setPunti(punti);
+                   piloti[i].setPunti(punti);                
                }
+               else if(i==nPilotiPresenti-1)
+               {
+                   
+                   throw new EccezionePilotaNonPresente();
+               }
+                 
+               
             }
         return 0; 
     }
@@ -139,7 +154,7 @@ public class Campionato
         return classifica; 
     }
     
-    public Pilota[] visualizzaPilotiScuderiaOrdinati(String scuderia) 
+    public Pilota[] visualizzaPilotiScuderiaOrdinati(String scuderia) throws EccezioneScuderiaNonPresente, ArrayIndexOutOfBoundsException
     {
         Pilota[] pilotiScuderia=new Pilota[getNumPiloti()];
         Pilota pilota;
@@ -155,11 +170,14 @@ public class Campionato
                }
             }
         pilotiScuderia=Ordinatore.ordinaScuderia(pilotiScuderia);
-        return pilotiScuderia;
+        if(pilotiScuderia[0]==null)
+            throw new EccezioneScuderiaNonPresente();
+        else
+            return pilotiScuderia;
         
     }
     
-    public int visualizzaPuntiScuderia(String scuderia)
+    public int visualizzaPuntiScuderia(String scuderia) throws EccezioneScuderiaNonPresente
     {
         int puntiScuderia=0;
         for(int i=0;i<nPilotiPresenti;i++)
@@ -168,9 +186,34 @@ public class Campionato
                {
                     puntiScuderia=+puntiScuderia+piloti[i].getPunti();
                }
+               else if(i==nPilotiPresenti-1 && puntiScuderia==0)
+                     throw new EccezioneScuderiaNonPresente();
             }
-        
         return puntiScuderia;
+    }
+    
+    public void salvaPilota(String nomeFile) throws IOException, EccezionePosizioneNonValida, FileException
+    {
+        TextFile f1=new TextFile(nomeFile,'W');
+        Pilota pilota;
+        for(int i=0;i<nPilotiPresenti;i++)
+            {
+               pilota=getPilotaPosizione(i);
+                if(pilota!=null)
+                {
+                    f1.toFile(i+";"+pilota.getnPilota()+";"+pilota.getNome()+";"+pilota.getCognome()+";"+pilota.getAnnoDiNascita()+";"+pilota.getScuderia()+";"+pilota.getPunti()+";");
+                }
+            }
+        f1.close(); 
+    }
+    
+    public void salvaPilotaBinario(String nomeFile) throws IOException, EccezionePosizioneNonValida, FileException
+    {
+        FileOutputStream f1=new FileOutputStream(nomeFile);
+        ObjectOutputStream writer=new ObjectOutputStream(f1);
+        writer.writeObject(this);
+        writer.flush();
+        writer.close();
     }
     
     

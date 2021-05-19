@@ -5,11 +5,13 @@
  */
 package com.mycompany._progetto_f1;
 
+import java.io.Serializable;
+
 /**
  *
  * @author plona
  */
-public class Pilota 
+public class Pilota implements Serializable
 {
     private String nome;
     private String cognome;

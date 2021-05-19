@@ -1,0 +1,6 @@
+0;44;lewis;hamilton;1980;mercedes;40;
+1;55;carlos;sainz;1993;ferrari;0;
+2;16;charles;leclerc;1997;ferrari;30;
+3;77;valterri;bottas;1989;mercedes;35;
+4;33;max;verstappen;1997;red bull;45;
+5;11;sergio;perez;1990;red bull;0;

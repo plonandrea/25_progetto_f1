@@ -7,18 +7,14 @@ package eccezioni;
 
 /**
  *
- * @author User
+ * @author STUDENTE
  */
-public class FileException extends Exception
+public class EccezioneScuderiaNonPresente extends Exception
 {
-    private String motivoEccezione;
-    public FileException(String message)
-    {
-        motivoEccezione=message;
-    }
-    
     public String toString()
     {
-        return motivoEccezione;
+        String s="";
+        s+="questa scuderia non è presente";
+        return s;
     }
 }
