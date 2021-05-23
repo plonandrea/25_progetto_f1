@@ -19,7 +19,7 @@ import java.util.InputMismatchException;
  */
 public class Main implements Serializable
 {
-    public static void main(String[] args) throws IOException 
+    public static void main(String[] args) 
     {
         String[] vociMenu=new String[10];
         int sceltaUtente=-1;
@@ -73,7 +73,6 @@ public class Main implements Serializable
         {
             try
             {
-            {
                 sceltaUtente=menu.sceltaMenu();
                 switch(sceltaUtente)
                 {
@@ -84,9 +83,9 @@ public class Main implements Serializable
                     }
                     case 1:
                     { 
-                        if(c.getNumPiloti()==c.getNumMaxPiloti())
+                        if(c.getnPilotiPresenti()==c.getNumMaxPiloti())
                         {
-                            System.out.println("impossibile aggiunge un pilota, il campionato è pieno");
+                            System.out.println("impossibile aggiungere un pilota, il campionato è pieno");
                             System.out.println("premi un pulsante per continuare");
                             tastiera.nextLine();
                             break;
@@ -141,11 +140,8 @@ public class Main implements Serializable
                             {
                                 System.out.println(e2.toString());
                                 break;
-                            }
-                            
-                                 
-                        }
-                       
+                            }         
+                        }                      
                     }
                     case 2:
                     {
@@ -184,11 +180,12 @@ public class Main implements Serializable
                             System.out.println(pilota.toString());
                             System.out.println("premi un pulsante per continuare");
                             tastiera.nextLine();
+                            tastiera.nextLine();
                             break;
                         }
                         catch(NullPointerException e1)
                         {
-                            System.out.println("nessun pilota ha questo numero");
+                            System.out.println("Nessun pilota presente con questo numero");
                             tastiera.nextLine();
                             break;
                         }
@@ -205,7 +202,7 @@ public class Main implements Serializable
                     {
                         try
                         {
-                            System.out.println("di che scuderia vuoi visualizare i piloti?--> ");     
+                            System.out.println("di che scuderia vuoi visualizzare i piloti?--> ");     
                             scuderia=tastiera.nextLine();
 
                             Pilota[] scuderiaOrdinato;
@@ -221,7 +218,7 @@ public class Main implements Serializable
                         }
                         catch(EccezioneScuderiaNonPresente e1)
                         {
-                            e1.toString();
+                            System.out.println(e1.toString());
                             break;
                         }
                         catch(ArrayIndexOutOfBoundsException e2)
@@ -248,15 +245,13 @@ public class Main implements Serializable
                         catch(InputMismatchException e1)
                         {
                             System.out.println("il valore inserito non è corretto");
-                            tastiera.nextLine();
-                                
+                            tastiera.nextLine();      
                             break;
                         } 
                         catch(EccezionePilotaNonPresente e2)
                         {
                             System.out.println(e2.toString());
-                            tastiera.nextLine();
-                                
+                            tastiera.nextLine();        
                             break;
                         } 
               
@@ -288,16 +283,29 @@ public class Main implements Serializable
                     }
                     case 7:
                     {
-                        Pilota[] classifica;
-    
-                        classifica=c.elencoPuntiPiloti();
-                        for(int i=0;i<classifica.length;i++)
+                        try
                         {
-                            System.out.println(classifica[i].getnPilota()+" "+classifica[i].getCognome()+" "+classifica[i].getScuderia()+" punti: "+classifica[i].getPunti());
+                            Pilota[] classifica;
+
+                            classifica=c.elencoPuntiPiloti();
+                            for(int i=0;i<classifica.length;i++)
+                            {
+                                System.out.println(classifica[i].getnPilota()+" "+classifica[i].getCognome()+" "+classifica[i].getScuderia()+" punti: "+classifica[i].getPunti());
+                            }
+                            System.out.println("premi un pulsante per continuare");
+                                tastiera.nextLine();  
+                            break;
                         }
-                        System.out.println("premi un pulsante per continuare");
-                            tastiera.nextLine();  
-                        break;
+                        catch(EccezionePilotiNonPresenti e1)
+                        {
+                            System.out.println(e1.toString());
+                            break;
+                        }
+                        catch(ArrayIndexOutOfBoundsException e2)
+                        {
+                            System.out.println("nessun pilota presente");
+                            break;
+                        }  
                     }   
                     case 8:
                     {
@@ -305,16 +313,18 @@ public class Main implements Serializable
                         {
                             c.salvaPilota(nomeFile);
                             System.out.println("salvataggio avvenuto correttamente");
+                            break;
                         }
                         catch(IOException e1)
                         {
                             System.out.println("impossibile accedere al file, i piloti non sono stati salvati");
+                            break;
                         }
                         catch(EccezionePosizioneNonValida | FileException e2)
                         {
                             System.out.println(e2.toString());
+                            break;
                         }    
-                        break;
                     }
                     case 9:
                     {
@@ -322,22 +332,22 @@ public class Main implements Serializable
                         {
                             c.salvaPilotaBinario(nomeFileBinario);
                             System.out.println("salvataggio avvenuto correttamente");
+                            break;
                         }
                         catch(IOException e1)
                         {
                             System.out.println("impossibile accedere al file, i piloti non sono stati salvati");
+                            break;
                         }
-                        catch(EccezionePosizioneNonValida | FileException e2)
+                        catch(FileException e2)
                         {
                             System.out.println(e2.toString());
+                            break;
                         }  
-                        break;
 
                     }
                 }
             }   
-            
-            }
             catch(InputMismatchException | NumberFormatException e1)
             {
                 tastiera.nextLine();

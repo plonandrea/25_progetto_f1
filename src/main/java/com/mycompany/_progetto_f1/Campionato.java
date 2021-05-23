@@ -13,8 +13,16 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- *
- * @author plona
+ * la classe campionato rappresenta un campionato di piloti
+ * un campionato è costituto da una array di piloti, ci possono 
+ * essere massimo 20 piloti NUM_MAX_PILOTI
+ * questa classe consente di svolgere operazioni di ricerca, inserimento, eliminazione
+ * dei piloti nel campionato
+ * gli attributi sono<br>
+ * piloti: array di piloti<br>
+ * NUM_MAX_PILOTI: costante che indica il numero massimi di piloti presenti<br>
+ * nPilotiPresenti: indica il numero di piloti presenti nell'array
+ * @author
  */
 public class Campionato implements Serializable
 {
@@ -22,10 +30,23 @@ public class Campionato implements Serializable
     private static final int NUM_MAX_PILOTI=20;
     public int nPilotiPresenti=0;
 
+    /**
+     * costruttore della classe campionato 
+     * consenti di istanziare un nuovo campionato
+     * costituito da NUM_MAX_PILOTI piloti vuoto
+     */
+    
     public Campionato() 
     {   
         piloti=new Pilota[NUM_MAX_PILOTI];
     }
+    
+    /**
+     * costruttore di copia
+     * consente di istanziare un nuovo campionato
+     * copia del campionato passato come parametro
+     * @param c il campionato di cui creare la copia
+     */
     
     public Campionato(Campionato c) 
     {   
@@ -36,17 +57,27 @@ public class Campionato implements Serializable
         }
     }
     
+    /**
+     * restituisce il numero massimo di piloti presenti
+     * @return 
+     */
+    
     public static int getNumMaxPiloti()
     {
         return NUM_MAX_PILOTI;
     }
 
+    /**
+     * restituisce il numero di piloti presenti
+     * @return 
+     */
+    
     public int getnPilotiPresenti() 
     {
         return nPilotiPresenti;
     }  
     
-    public int getNumPiloti()
+   /* public int getNumPiloti()
     {
         int contatore=0;
    
@@ -56,14 +87,24 @@ public class Campionato implements Serializable
                 contatore++;
         }
         return contatore;
-    }
+    }*/
     
+    /**
+     * consente di aggiungere un pilota nel campionato
+     * @param p il pilota da inserire nel campionato
+     */
     
     public void aggiungiPilota(Pilota p)
     {
             piloti[nPilotiPresenti]=new Pilota(p);
             nPilotiPresenti++;
     }
+    
+    /**
+     * permette di visualizzare un pilota del campionato in base al suo numero
+     * @param numero numero del pilota da visualizzare
+     * @return 
+     */
     
     public Pilota getPilota(int numero)
     {
@@ -77,11 +118,22 @@ public class Campionato implements Serializable
         return null;
     }
     
+    /**
+     * permette di visualizzare un pilota del campionato in base alla sua posizione
+     * @param posizione posizione del pilota da visualizzare
+     * @return 
+     */
+    
     public Pilota getPilotaPosizione(int posizione)
     {
         return piloti[posizione];
     }
     
+    /**
+     * permetto di eliminare un pilota dal campionato passando il suo numero
+     * @param numeroPilota numero del pilota da eliminare
+     * @throws EccezionePilotaNonPresente eccezione che si solleva nel caso non ci siano piloti presenti con quel numero
+     */
     
     public void eliminaPilota(int numeroPilota) throws EccezionePilotaNonPresente   
     {
@@ -91,12 +143,20 @@ public class Campionato implements Serializable
                if(piloti[i].getnPilota()==numeroPilota)
                {
                    aggiornaPosizione(i);
+                   break;
                }
-               else
+               else if(i==nPilotiPresenti-1)
+               {
                    throw new EccezionePilotaNonPresente();
+               }
                       
             }    
     }
+    
+    /**
+     * aggiorna la posizione dei piloti dopo l'eliminazione di un pilota
+     * @param posizione posizione del pilota eliminato
+     */
     
     private void aggiornaPosizione(int posizione)
     {
@@ -106,6 +166,11 @@ public class Campionato implements Serializable
         }
         nPilotiPresenti--;    
     }
+    
+    /**
+     * permette di visualizzare tutti i piloti presenti
+     * @return 
+     */
     
     public String mostraPiloti()
     {
@@ -118,6 +183,14 @@ public class Campionato implements Serializable
         return s; 
     }
     
+    /**
+     * permette di aggiungere punti ad un pilota in base al numero
+     * @param numero numero del pilota a cui si vuole aggiungere punti
+     * @param punti numero di punti che si vogliono aggiungere al pilota
+     * @return
+     * @throws EccezionePilotaNonPresente eccezione che si solleva nel caso non ci siano piloti presenti con quel numero
+     */
+    
     public int aggiungiPunti(int numero,int punti) throws EccezionePilotaNonPresente
     {
         for(int i=0;i<nPilotiPresenti;i++)
@@ -125,7 +198,8 @@ public class Campionato implements Serializable
                if(piloti[i].getnPilota()==numero)
                {
                    punti=punti+piloti[i].getPunti();
-                   piloti[i].setPunti(punti);                
+                   piloti[i].setPunti(punti);   
+                   break; 
                }
                else if(i==nPilotiPresenti-1)
                {
@@ -138,9 +212,14 @@ public class Campionato implements Serializable
         return 0; 
     }
     
-    public Pilota[] elencoPuntiPiloti()
+    /**
+     * permette di visualizzare la classifica dei piloti in base ai punti
+     * @return 
+     */
+    
+    public Pilota[] elencoPuntiPiloti() throws EccezionePilotiNonPresenti, ArrayIndexOutOfBoundsException
     {
-        Pilota[] classifica=new Pilota[getNumPiloti()];
+        Pilota[] classifica=new Pilota[getnPilotiPresenti()];
         Pilota pilota;
         
         for(int i=0;i<nPilotiPresenti;i++)
@@ -149,14 +228,25 @@ public class Campionato implements Serializable
                classifica[i]=pilota;
             }
         
+        if(classifica[0]==null)
+            throw new EccezionePilotiNonPresenti();
+        
+        
         classifica=Ordinatore.ordinaClassificaPiloti(classifica);
         
         return classifica; 
     }
     
-    public Pilota[] visualizzaPilotiScuderiaOrdinati(String scuderia) throws EccezioneScuderiaNonPresente, ArrayIndexOutOfBoundsException
+    /**
+     * permette di visualizzare i piloti di una specifica scuderia in ordina alfabetico
+     * @param scuderia nome della scuderia di cui si vogliono visualizzare i piloti
+     * @return
+     * @throws EccezioneScuderiaNonPresente eccezione che si solleva nel caso non ci esista la scuderia passata 
+     */
+    
+    public Pilota[] visualizzaPilotiScuderiaOrdinati(String scuderia) throws EccezioneScuderiaNonPresente//, ArrayIndexOutOfBoundsException
     {
-        Pilota[] pilotiScuderia=new Pilota[getNumPiloti()];
+        Pilota[] pilotiScuderia=new Pilota[getnPilotiPresenti()];
         Pilota pilota;
         int c=0;
         
@@ -177,6 +267,12 @@ public class Campionato implements Serializable
         
     }
     
+    /**
+     * permette di visualizzare i punti di una scuderia sommando i punti dei piloti di quella scuderia
+     * @param scuderia nome della scuderia di cui si vogliono visualizzare i punti
+     * @return
+     * @throws EccezioneScuderiaNonPresente eccezione che si solleva nel caso non ci esista la scuderia passata 
+     */
     public int visualizzaPuntiScuderia(String scuderia) throws EccezioneScuderiaNonPresente
     {
         int puntiScuderia=0;
@@ -191,6 +287,14 @@ public class Campionato implements Serializable
             }
         return puntiScuderia;
     }
+    
+    /**
+     * permette di salvare i dati dei piloti su un file csv
+     * @param nomeFile nome del file
+     * @throws IOException
+     * @throws EccezionePosizioneNonValida
+     * @throws FileException 
+     */
     
     public void salvaPilota(String nomeFile) throws IOException, EccezionePosizioneNonValida, FileException
     {
@@ -207,13 +311,21 @@ public class Campionato implements Serializable
         f1.close(); 
     }
     
-    public void salvaPilotaBinario(String nomeFile) throws IOException, EccezionePosizioneNonValida, FileException
+    /**
+     * permette di salvare i dati dei piloti su un file binario
+     * @param nomeFile nome del file
+     * @throws IOException
+     * @throws EccezionePosizioneNonValida
+     * @throws FileException 
+     */
+    
+    public void salvaPilotaBinario(String nomeFile) throws IOException, FileException
     {
         FileOutputStream f1=new FileOutputStream(nomeFile);
         ObjectOutputStream writer=new ObjectOutputStream(f1);
         writer.writeObject(this);
         writer.flush();
-        writer.close();
+        writer.close(); 
     }
     
     
