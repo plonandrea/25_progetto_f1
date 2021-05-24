@@ -260,7 +260,7 @@ public class Main implements Serializable
                     {
                         try
                         {
-                            System.out.println("di che scuderia vuoi visuallizare i punti?--> ");     
+                            System.out.println("di che scuderia vuoi visualizzare i punti?--> ");     
                             scuderia=tastiera.nextLine();
 
                             puntiScuderia=c.visualizzaPuntiScuderia(scuderia);

@@ -160,7 +160,7 @@ public class Campionato implements Serializable
     
     private void aggiornaPosizione(int posizione)
     {
-        for(int i=posizione;i<nPilotiPresenti;i++)            
+        for(int i=posizione;i<nPilotiPresenti-1;i++)            
         {
             piloti[i]=piloti[i+1];
         }
